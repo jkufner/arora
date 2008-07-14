@@ -64,7 +64,7 @@
 
 #include "browserapplication.h"
 #include "browsermainwindow.h"
-#include "ui_passworddialog.h"
+#include "passwords.h"
 #include "ui_proxy.h"
 
 #include <qdialog.h>
@@ -72,6 +72,7 @@
 #include <qsettings.h>
 #include <qstyle.h>
 #include <qtextdocument.h>
+#include <qshortcut.h>
 
 #include <qauthenticator.h>
 #include <qnetworkproxy.h>
@@ -138,24 +139,27 @@ void NetworkAccessManager::loadSettings()
 void NetworkAccessManager::authenticationRequired(QNetworkReply *reply, QAuthenticator *auth)
 {
     BrowserMainWindow *mainWindow = BrowserApplication::instance()->mainWindow();
+    PasswordsManager *passwordsManager = BrowserApplication::instance()->passwordsManager();
 
-    QDialog dialog(mainWindow);
-    dialog.setWindowFlags(Qt::Sheet);
+    PasswordDialog pd(mainWindow);
 
-    Ui::PasswordDialog passwordDialog;
-    passwordDialog.setupUi(&dialog);
-
-    passwordDialog.iconLabel->setText(QString());
-    passwordDialog.iconLabel->setPixmap(mainWindow->style()->standardIcon(QStyle::SP_MessageBoxQuestion, 0, mainWindow).pixmap(32, 32));
-
-    QString introMessage = tr("<qt>Enter username and password for \"%1\" at %2</qt>");
+    QString introMessage = tr("<qt>Enter username and password for \"<b>%1</b>\" at <b>%2</b></qt>");
     introMessage = introMessage.arg(Qt::escape(auth->realm())).arg(Qt::escape(reply->url().toString()));
-    passwordDialog.introLabel->setText(introMessage);
-    passwordDialog.introLabel->setWordWrap(true);
+    pd.setText(introMessage);
 
-    if (dialog.exec() == QDialog::Accepted) {
-        auth->setUser(passwordDialog.userNameLineEdit->text());
-        auth->setPassword(passwordDialog.passwordLineEdit->text());
+    PasswordsManagerAccountsModel model(passwordsManager, reply->url().toString());
+    pd.setPasswordModel(&model);
+
+    if (pd.exec() == QDialog::Accepted) {
+        QString username = pd.getUsername();
+        QString password = pd.getPassword();
+
+        auth->setUser(username);
+        auth->setPassword(password);
+
+        if (pd.getRememberCheckBoxState()) {
+            passwordsManager->storeAccountPassword(reply->url().toString(), username, password);
+        }
     }
 }
 
@@ -237,4 +241,68 @@ void NetworkAccessManager::sslErrors(QNetworkReply *reply, const QList<QSslError
         reply->ignoreSslErrors();
     }
 }
+
+
+/****************************************************************************
+ *      PasswordDialog
+ */
+
+PasswordDialog::PasswordDialog(QWidget *parent)
+        : QDialog(parent)
+{
+    QSettings settings;
+
+    //qDebug("-- created --");
+    setupUi(this);
+    setWindowFlags(Qt::Sheet);
+    iconLabel->setText(QString());
+    iconLabel->setPixmap(parent->style()->standardIcon(QStyle::SP_MessageBoxQuestion, 0, parent).pixmap(32, 32));
+    introLabel->setWordWrap(true);
+
+    bool r = settings.value(QLatin1String("passwords/rememberPasswords"), false).toBool();
+    rememberCheckBox->setVisible(r);
+    rememberCheckBox->setChecked(r);
+
+    connect(userNameCombo, SIGNAL(editTextChanged(QString)), this, SLOT(userNameComboEdited(QString)));
+
+    // fixme: there is little bug with qcombobox -- when pressed return with focus on it, it erases itself
+    QShortcut *s = new QShortcut(QKeySequence(Qt::Key_Return), this);
+    connect(s, SIGNAL(activated()), this, SLOT(accept()));
+}
+
+void PasswordDialog::setText(QString text)
+{
+    introLabel->setText(text);
+}
+
+QString PasswordDialog::getUsername()
+{
+        return userNameCombo->currentText();
+}
+
+QString PasswordDialog::getPassword()
+{
+        return passwordLineEdit->text();
+}
+
+bool PasswordDialog::getRememberCheckBoxState()
+{
+    return rememberCheckBox->isChecked();
+}
+
+void PasswordDialog::setPasswordModel(PasswordsManagerAccountsModel *model)
+{
+    userNameCombo->setModel((QAbstractTableModel *)model);
+    userNameCombo->setModelColumn(0);
+}
+
+void PasswordDialog::userNameComboEdited(QString text)
+{
+    int index = userNameCombo->findText(text);
+
+    //qDebug(qPrintable(QString("edited: index = %1, text = \"%2\"").arg(index).arg(text)));
+    if (index >= 0)
+        passwordLineEdit->setText(userNameCombo->model()->index(index, 1).data().toString());
+}
+
 #endif

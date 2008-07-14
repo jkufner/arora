@@ -65,6 +65,8 @@
 
 #include <qnetworkaccessmanager.h>
 
+#include "ui_passworddialog.h"
+
 class NetworkAccessManager : public QNetworkAccessManager
 {
     Q_OBJECT
@@ -81,6 +83,26 @@ private slots:
 #ifndef QT_NO_OPENSSL
     void sslErrors(QNetworkReply *reply, const QList<QSslError> &error);
 #endif
+};
+
+class PasswordsManagerAccountsModel;
+
+class PasswordDialog : public QDialog, public Ui_PasswordDialog
+{
+    Q_OBJECT
+
+public:
+    PasswordDialog(QWidget *parent);
+    void setPasswordModel(PasswordsManagerAccountsModel *model);
+    void setText(QString text);
+
+    QString getUsername();
+    QString getPassword();
+    bool getRememberCheckBoxState();
+
+
+private slots:
+    void userNameComboEdited(QString text);
 };
 
 #endif // NETWORKACCESSMANAGER_H

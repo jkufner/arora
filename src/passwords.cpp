@@ -201,44 +201,44 @@ QVariant PasswordStorageModel::headerData (int section, Qt::Orientation orientat
 
 QStringList PasswordStorageDummy::getUriList(void) const
 {
-    qDebug(qPrintable(QString("getUriList")));
+    qDebug("getUriList");
     QStringList list;
-    list.append("http://localhost/");
-    list.append("http://phpmyadmin/");
+    list.append(QLatin1String("http://localhost/"));
+    list.append(QLatin1String("http://phpmyadmin/"));
     return list;
 }
 
 QStringList PasswordStorageDummy::getAccounts(const QString uri) const
 {
-    qDebug(qPrintable(QString("getAccounts: uri = \"%1\"").arg(uri)));
+    qDebug(qPrintable(QString(QLatin1String("getAccounts: uri = \"%1\"")).arg(uri)));
     QStringList sl;
-    sl.append("root");
+    sl.append(QLatin1String("root"));
     sl.append(uri);
-    sl.append("hello world");
-    sl.append("nobody");
+    sl.append(QLatin1String("hello world"));
+    sl.append(QLatin1String("nobody"));
     return sl;
 }
 
 PasswordFormData PasswordStorageDummy::getAccountData(const QString uri, const QString account) const
 {
-    qDebug(qPrintable(QString("getAccountData: uri = \"%1\", account = \"%2\"").arg(uri).arg(account)));
+    qDebug(qPrintable(QString(QLatin1String("getAccountData: uri = \"%1\", account = \"%2\"")).arg(uri).arg(account)));
     PasswordFormData d;
-    d["username"] = account;
-    d["password"] = account;
-    d["submit"] = QString("Login");
+    d[QLatin1String("username")] = account;
+    d[QLatin1String("password")] = account;
+    d[QLatin1String("submit")] = QLatin1String("Login");
     return d;
 }
 
 bool PasswordStorageDummy::storeAccountData(const QString uri, const QString account, const PasswordFormData data)
 {
     (void) data;
-    qDebug(qPrintable(QString("storeAccountData: uri = \"%1\", account = \"%2\"").arg(uri).arg(account)));
+    qDebug(qPrintable(QString(QLatin1String("storeAccountData: uri = \"%1\", account = \"%2\"")).arg(uri).arg(account)));
     return true;
 }
 
 bool PasswordStorageDummy::removeAccount(const QString uri, const QString account)
 {
-    qDebug(qPrintable(QString("removeAccount: uri = \"%1\", account = \"%2\"").arg(uri).arg(account)));
+    qDebug(qPrintable(QString(QLatin1String("removeAccount: uri = \"%1\", account = \"%2\"")).arg(uri).arg(account)));
     return true;
 }
 
@@ -291,8 +291,8 @@ bool PasswordsManager::storeAccountData(const QString uri, const QString account
 bool PasswordsManager::storeAccountPassword(const QString uri, const QString account, const QString password)
 {
     PasswordFormData data;
-    data["username"] = account;
-    data["password"] = password; 
+    data[QLatin1String("username")] = account;
+    data[QLatin1String("password")] = password; 
 
     return storeAccountData(uri, account, data);
 }
@@ -347,7 +347,7 @@ QVariant PasswordsManagerAccountsModel::data(const QModelIndex & index, int role
         case 0:
             return accounts.at(index.row());
         case 1:
-            return passwordsManager->getAccountData(uri, accounts.at(index.row())).value("password");
+            return passwordsManager->getAccountData(uri, accounts.at(index.row())).value(QLatin1String("password"));
         default:
             return 0;
         }
