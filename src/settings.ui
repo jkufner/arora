@@ -5,8 +5,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>598</width>
-    <height>399</height>
+    <width>596</width>
+    <height>467</height>
    </rect>
   </property>
   <property name="windowTitle" >
@@ -29,8 +29,16 @@
       <number>0</number>
      </property>
      <widget class="QWidget" name="tab" >
+      <property name="geometry" >
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>574</width>
+        <height>384</height>
+       </rect>
+      </property>
       <attribute name="title" >
-       <string>General</string>
+       <string>&amp;General</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout_4" >
        <item row="0" column="0" >
@@ -217,8 +225,16 @@
       </layout>
      </widget>
      <widget class="QWidget" name="tab_3" >
+      <property name="geometry" >
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>574</width>
+        <height>384</height>
+       </rect>
+      </property>
       <attribute name="title" >
-       <string>Appearance</string>
+       <string>&amp;Appearance</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout_3" >
        <item row="0" column="0" >
@@ -303,8 +319,16 @@
       </layout>
      </widget>
      <widget class="QWidget" name="tab_2" >
+      <property name="geometry" >
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>574</width>
+        <height>384</height>
+       </rect>
+      </property>
       <attribute name="title" >
-       <string>Privacy</string>
+       <string>&amp;Privacy</string>
       </attribute>
       <layout class="QVBoxLayout" name="verticalLayout_3" >
        <item>
@@ -336,7 +360,7 @@
           <item>
            <widget class="QCheckBox" name="enableImages" >
             <property name="text" >
-             <string>View Images</string>
+             <string>Show Images</string>
             </property>
             <property name="checked" >
              <bool>true</bool>
@@ -354,6 +378,12 @@
          <layout class="QGridLayout" >
           <item row="0" column="0" >
            <widget class="QLabel" name="label_2" >
+            <property name="sizePolicy" >
+             <sizepolicy vsizetype="Preferred" hsizetype="Preferred" >
+              <horstretch>1</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
             <property name="text" >
              <string>Accept Cookies:</string>
             </property>
@@ -364,6 +394,12 @@
           </item>
           <item row="0" column="1" >
            <widget class="QComboBox" name="acceptCombo" >
+            <property name="sizePolicy" >
+             <sizepolicy vsizetype="Fixed" hsizetype="Preferred" >
+              <horstretch>2</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
             <item>
              <property name="text" >
               <string>Always</string>
@@ -383,13 +419,25 @@
           </item>
           <item row="0" column="2" >
            <widget class="QPushButton" name="exceptionsButton" >
+            <property name="sizePolicy" >
+             <sizepolicy vsizetype="Fixed" hsizetype="Minimum" >
+              <horstretch>1</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
             <property name="text" >
-             <string>Exceptions...</string>
+             <string>&amp;Exceptions...</string>
             </property>
            </widget>
           </item>
           <item row="1" column="0" >
            <widget class="QLabel" name="label" >
+            <property name="sizePolicy" >
+             <sizepolicy vsizetype="Preferred" hsizetype="Preferred" >
+              <horstretch>1</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
             <property name="text" >
              <string>Keep Cookies Until:</string>
             </property>
@@ -400,6 +448,12 @@
           </item>
           <item row="1" column="1" >
            <widget class="QComboBox" name="keepUntilCombo" >
+            <property name="sizePolicy" >
+             <sizepolicy vsizetype="Fixed" hsizetype="Preferred" >
+              <horstretch>2</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
             <item>
              <property name="text" >
               <string>They expire</string>
@@ -419,8 +473,118 @@
           </item>
           <item row="1" column="2" >
            <widget class="QPushButton" name="cookiesButton" >
+            <property name="sizePolicy" >
+             <sizepolicy vsizetype="Fixed" hsizetype="Minimum" >
+              <horstretch>1</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
             <property name="text" >
-             <string>Cookies...</string>
+             <string>&amp;Cookies...</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="passwordsGroupBox" >
+         <property name="sizePolicy" >
+          <sizepolicy vsizetype="Preferred" hsizetype="Preferred" >
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="title" >
+          <string>Passwords</string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_5" >
+          <item row="0" column="2" >
+           <widget class="QPushButton" name="passwordsButton" >
+            <property name="sizePolicy" >
+             <sizepolicy vsizetype="Fixed" hsizetype="Preferred" >
+              <horstretch>1</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="text" >
+             <string>Pass&amp;words...</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0" >
+           <widget class="QLabel" name="label_15" >
+            <property name="enabled" >
+             <bool>false</bool>
+            </property>
+            <property name="sizePolicy" >
+             <sizepolicy vsizetype="Fixed" hsizetype="Minimum" >
+              <horstretch>1</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="text" >
+             <string>Storage backend:</string>
+            </property>
+            <property name="alignment" >
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1" >
+           <widget class="QComboBox" name="comboBox" >
+            <property name="enabled" >
+             <bool>false</bool>
+            </property>
+            <property name="sizePolicy" >
+             <sizepolicy vsizetype="Fixed" hsizetype="Expanding" >
+              <horstretch>2</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <item>
+             <property name="text" >
+              <string>default</string>
+             </property>
+            </item>
+            <item>
+             <property name="text" >
+              <string>SQLite</string>
+             </property>
+            </item>
+            <item>
+             <property name="text" >
+              <string>KWallet</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+          <item row="1" column="2" >
+           <widget class="QPushButton" name="pushButton" >
+            <property name="enabled" >
+             <bool>false</bool>
+            </property>
+            <property name="sizePolicy" >
+             <sizepolicy vsizetype="Fixed" hsizetype="Preferred" >
+              <horstretch>1</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="text" >
+             <string>Configure...</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="0" colspan="2" >
+           <widget class="QCheckBox" name="rememberPasswords" >
+            <property name="sizePolicy" >
+             <sizepolicy vsizetype="Fixed" hsizetype="Preferred" >
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="text" >
+             <string>Remember passwords</string>
             </property>
            </widget>
           </item>
@@ -443,8 +607,16 @@
       </layout>
      </widget>
      <widget class="QWidget" name="tab_6" >
+      <property name="geometry" >
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>574</width>
+        <height>384</height>
+       </rect>
+      </property>
       <attribute name="title" >
-       <string>Tabs</string>
+       <string>&amp;Tabs</string>
       </attribute>
       <layout class="QVBoxLayout" name="verticalLayout_5" >
        <item>
@@ -480,8 +652,16 @@
       </layout>
      </widget>
      <widget class="QWidget" name="tab_4" >
+      <property name="geometry" >
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>574</width>
+        <height>384</height>
+       </rect>
+      </property>
       <attribute name="title" >
-       <string>Proxy</string>
+       <string>Pro&amp;xy</string>
       </attribute>
       <layout class="QVBoxLayout" name="verticalLayout" >
        <item>
@@ -612,8 +792,16 @@
       </layout>
      </widget>
      <widget class="QWidget" name="tab_5" >
+      <property name="geometry" >
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>574</width>
+        <height>384</height>
+       </rect>
+      </property>
       <attribute name="title" >
-       <string>Advanced</string>
+       <string>A&amp;dvanced</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout_2" >
        <item row="0" column="0" >
@@ -647,6 +835,7 @@
  </widget>
  <tabstops>
   <tabstop>tabWidget</tabstop>
+  <tabstop>startupBehavior</tabstop>
   <tabstop>homeLineEdit</tabstop>
   <tabstop>setHomeToCurrentPageButton</tabstop>
   <tabstop>expireHistory</tabstop>
@@ -658,10 +847,17 @@
   <tabstop>fixedFontButton</tabstop>
   <tabstop>enablePlugins</tabstop>
   <tabstop>enableJavascript</tabstop>
+  <tabstop>enableImages</tabstop>
   <tabstop>acceptCombo</tabstop>
   <tabstop>exceptionsButton</tabstop>
   <tabstop>keepUntilCombo</tabstop>
   <tabstop>cookiesButton</tabstop>
+  <tabstop>rememberPasswords</tabstop>
+  <tabstop>passwordsButton</tabstop>
+  <tabstop>comboBox</tabstop>
+  <tabstop>pushButton</tabstop>
+  <tabstop>selectTabsWhenCreated</tabstop>
+  <tabstop>confirmClosingMultipleTabs</tabstop>
   <tabstop>proxySupport</tabstop>
   <tabstop>proxyType</tabstop>
   <tabstop>proxyHostName</tabstop>

@@ -65,6 +65,7 @@
 #include "browserapplication.h"
 #include "browsermainwindow.h"
 #include "cookiejar.h"
+#include "passwords.h"
 #include "history.h"
 #include "networkaccessmanager.h"
 #include "webview.h"
@@ -82,6 +83,7 @@ SettingsDialog::SettingsDialog(QWidget *parent)
     connect(exceptionsButton, SIGNAL(clicked()), this, SLOT(showExceptions()));
     connect(setHomeToCurrentPageButton, SIGNAL(clicked()), this, SLOT(setHomeToCurrentPage()));
     connect(cookiesButton, SIGNAL(clicked()), this, SLOT(showCookies()));
+    connect(passwordsButton, SIGNAL(clicked()), this, SLOT(showPasswords()));
     connect(standardFontButton, SIGNAL(clicked()), this, SLOT(chooseFont()));
     connect(fixedFontButton, SIGNAL(clicked()), this, SLOT(chooseFixedFont()));
 
@@ -107,6 +109,8 @@ void SettingsDialog::loadDefaults()
     enableJavascript->setChecked(defaultSettings->testAttribute(QWebSettings::JavascriptEnabled));
     enablePlugins->setChecked(defaultSettings->testAttribute(QWebSettings::PluginsEnabled));
     enableImages->setChecked(defaultSettings->testAttribute(QWebSettings::AutoLoadImages));
+
+    rememberPasswords->setChecked(true);
 }
 
 void SettingsDialog::loadFromSettings()
@@ -201,6 +205,8 @@ void SettingsDialog::loadFromSettings()
     }
     settings.endGroup();
 
+    settings.beginGroup(QLatin1String("passwords"));
+    rememberPasswords->setChecked(settings.value(QLatin1String("rememberPasswords"), true).toBool());
 
     // Proxy
     settings.beginGroup(QLatin1String("proxy"));
@@ -314,6 +320,11 @@ void SettingsDialog::saveToSettings()
     settings.setValue(QLatin1String("password"), proxyPassword->text());
     settings.endGroup();
 
+    // passwords
+    settings.beginGroup(QLatin1String("passwords"));
+    settings.setValue(QLatin1String("rememberPasswords"), rememberPasswords->isChecked());
+    settings.endGroup();
+
     // Tabs
     settings.beginGroup(QLatin1String("tabs"));
     settings.setValue(QLatin1String("selectNewTabs"), selectTabsWhenCreated->isChecked());
@@ -341,6 +352,12 @@ void SettingsDialog::showCookies()
 void SettingsDialog::showExceptions()
 {
     CookiesExceptionsDialog *dialog = new CookiesExceptionsDialog(BrowserApplication::cookieJar(), this);
+    dialog->exec();
+}
+
+void SettingsDialog::showPasswords()
+{
+    PasswordsDialog *dialog = new PasswordsDialog(this);
     dialog->exec();
 }
 

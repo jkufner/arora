@@ -82,6 +82,7 @@ private slots:
     void setHomeToCurrentPage();
     void showCookies();
     void showExceptions();
+    void showPasswords();
 
     void chooseFont();
     void chooseFixedFont();
