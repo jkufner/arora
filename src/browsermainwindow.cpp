@@ -71,10 +71,10 @@
 #include "downloadmanager.h"
 #include "history.h"
 #include "settings.h"
+#include "cookiejar.h"
 #include "tabbar.h"
 #include "tabwidget.h"
 #include "toolbarsearch.h"
-#include "ui_passworddialog.h"
 #include "webview.h"
 #include "webviewsearch.h"
 
@@ -500,6 +500,7 @@ void BrowserMainWindow::setupMenu()
     QList<QAction*> bookmarksActions;
 
     QAction *showAllBookmarksAction = new QAction(tr("Manage Bookmarks..."), this);
+    showAllBookmarksAction->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_B));
     connect(showAllBookmarksAction, SIGNAL(triggered()), this, SLOT(slotShowBookmarksDialog()));
     m_addBookmark = new QAction(QIcon(QLatin1String(":addbookmark.png")), tr("Add Bookmark..."), this);
     m_addBookmark->setIconVisibleInMenu(false);
@@ -517,9 +518,14 @@ void BrowserMainWindow::setupMenu()
             this, SLOT(slotAboutToShowWindowMenu()));
     slotAboutToShowWindowMenu();
 
+    // Tools
     QMenu *toolsMenu = menuBar()->addMenu(tr("&Tools"));
     toolsMenu->addAction(tr("Web &Search"), this, SLOT(slotWebSearch()),
                          QKeySequence(tr("Ctrl+K", "Web Search")));
+    toolsMenu->addSeparator();
+    toolsMenu->addAction(tr("&Downloads..."), this, SLOT(slotDownloadManager()), QKeySequence(tr("Alt+Ctrl+L", "Download Manager")));
+    toolsMenu->addAction(tr("Coo&kies..."), this, SLOT(slotCookies()));
+    toolsMenu->addSeparator();
     toolsMenu->addAction(tr("&Clear Private Data"), this, SLOT(slotClearPrivateData()),
                          QKeySequence(tr("Ctrl+Shift+Delete", "Clear Private Data")));
 #ifndef Q_CC_MINGW
@@ -530,6 +536,7 @@ void BrowserMainWindow::setupMenu()
     m_enableInspector->setChecked(settings.value(QLatin1String("enableInspector"), false).toBool());
 #endif
 
+    // Help
     QMenu *helpMenu = menuBar()->addMenu(tr("&Help"));
     helpMenu->addAction(tr("About &Qt"), qApp, SLOT(aboutQt()));
     helpMenu->addAction(tr("About &Arora"), this, SLOT(slotAboutApplication()));
@@ -737,8 +744,14 @@ void BrowserMainWindow::slotFileSaveAs()
 
 void BrowserMainWindow::slotPreferences()
 {
-    SettingsDialog s(this);
-    s.exec();
+    SettingsDialog sd(this);
+    sd.exec();
+}
+
+void BrowserMainWindow::slotCookies()
+{
+    CookiesDialog cd(BrowserApplication::cookieJar(), this);
+    cd.exec();
 }
 
 void BrowserMainWindow::slotUpdateStatusbar(const QString &string)
@@ -1055,9 +1068,7 @@ void BrowserMainWindow::slotAboutToShowWindowMenu()
     m_windowMenu->addAction(m_tabWidget->nextTabAction());
     m_windowMenu->addAction(m_tabWidget->previousTabAction());
     m_windowMenu->addSeparator();
-    m_windowMenu->addAction(tr("Downloads"), this, SLOT(slotDownloadManager()), QKeySequence(tr("Alt+Ctrl+L", "Download Manager")));
 
-    m_windowMenu->addSeparator();
     QList<BrowserMainWindow*> windows = BrowserApplication::instance()->mainWindows();
     for (int i = 0; i < windows.count(); ++i) {
         BrowserMainWindow *window = windows.at(i);
