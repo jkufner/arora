@@ -65,6 +65,7 @@
 #include "bookmarks.h"
 #include "browsermainwindow.h"
 #include "cookiejar.h"
+#include "passwords.h"
 #include "downloadmanager.h"
 #include "history.h"
 #include "networkaccessmanager.h"
@@ -91,6 +92,7 @@
 
 DownloadManager *BrowserApplication::s_downloadManager = 0;
 HistoryManager *BrowserApplication::s_historyManager = 0;
+PasswordsManager *BrowserApplication::s_passwordsManager = 0;
 NetworkAccessManager *BrowserApplication::s_networkAccessManager = 0;
 BookmarksManager *BrowserApplication::s_bookmarksManager = 0;
 
@@ -179,6 +181,7 @@ BrowserApplication::~BrowserApplication()
     quiting = true;
     delete s_downloadManager;
     qDeleteAll(m_mainWindows);
+    delete s_passwordsManager;
     delete s_networkAccessManager;
     delete s_bookmarksManager;
 }
@@ -498,6 +501,15 @@ CookieJar *BrowserApplication::cookieJar()
 {
     return (CookieJar*)networkAccessManager()->cookieJar();
 }
+
+PasswordsManager *BrowserApplication::passwordsManager()
+{
+    if (!s_passwordsManager) {
+        s_passwordsManager = new PasswordsManager();
+    }
+    return s_passwordsManager;
+}
+
 
 DownloadManager *BrowserApplication::downloadManager()
 {

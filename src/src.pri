@@ -29,7 +29,9 @@ FORMS += \
     downloads.ui \
     history.ui \
     passworddialog.ui \
+    passworddetails.ui \
     proxy.ui \
+    passwords.ui \
     searchbanner.ui \
     settings.ui
 
@@ -48,6 +50,7 @@ HEADERS += \
     locationbar_p.h \
     modelmenu.h \
     networkaccessmanager.h \
+    passwords.h \
     searchlineedit.h \
     settings.h \
     tabbar.h \
@@ -72,6 +75,7 @@ SOURCES += \
     locationbar.cpp \
     modelmenu.cpp \
     networkaccessmanager.cpp \
+    passwords.cpp \
     searchlineedit.cpp \
     settings.cpp \
     tabbar.cpp \
