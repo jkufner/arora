@@ -73,6 +73,7 @@
 #include "history.h"
 #include "settings.h"
 #include "cookiejar.h"
+#include "passwords.h"
 #include "tabbar.h"
 #include "tabwidget.h"
 #include "toolbarsearch.h"
@@ -527,6 +528,7 @@ void BrowserMainWindow::setupMenu()
     toolsMenu->addSeparator();
     toolsMenu->addAction(tr("&Downloads..."), this, SLOT(slotDownloadManager()), QKeySequence(tr("Alt+Ctrl+L", "Download Manager")));
     toolsMenu->addAction(tr("Coo&kies..."), this, SLOT(slotCookies()));
+    toolsMenu->addAction(tr("&Passwords..."), this, SLOT(slotPasswords()));
     toolsMenu->addSeparator();
     toolsMenu->addAction(tr("&Clear Private Data"), this, SLOT(slotClearPrivateData()),
                          QKeySequence(tr("Ctrl+Shift+Delete", "Clear Private Data")));
@@ -754,6 +756,12 @@ void BrowserMainWindow::slotCookies()
 {
     CookiesDialog cd(BrowserApplication::cookieJar(), this);
     cd.exec();
+}
+
+void BrowserMainWindow::slotPasswords()
+{
+    PasswordsDialog pd(this);
+    pd.exec();
 }
 
 void BrowserMainWindow::slotUpdateStatusbar(const QString &string)

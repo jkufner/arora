@@ -115,6 +115,7 @@ private slots:
     void slotUpdateWindowTitle(const QString &title = QString());
 
     void slotPreferences();
+    void slotPasswords();
     void slotCookies();
 
     void slotFileNew();
