@@ -180,7 +180,7 @@ TabWidget::TabWidget(QWidget *parent)
     addTabButton->setDefaultAction(m_newTabAction);
     addTabButton->setAutoRaise(true);
     addTabButton->setToolButtonStyle(Qt::ToolButtonIconOnly);
-    setCornerWidget(addTabButton, Qt::TopRightCorner);
+    setCornerWidget(addTabButton, Qt::TopLeftCorner);
 #endif
 
 #if QT_VERSION >= 0x040500
@@ -192,7 +192,7 @@ TabWidget::TabWidget(QWidget *parent)
         closeTabButton->setDefaultAction(m_closeTabAction);
         closeTabButton->setAutoRaise(true);
         closeTabButton->setToolButtonStyle(Qt::ToolButtonIconOnly);
-        setCornerWidget(closeTabButton, Qt::TopLeftCorner);
+        setCornerWidget(closeTabButton, Qt::TopRightCorner);
 #if QT_VERSION >= 0x040500
     } else {
         m_tabBar->setTabsClosable(true);
