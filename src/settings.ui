@@ -517,15 +517,15 @@
       <attribute name="title">
        <string>Tabs</string>
       </attribute>
-      <layout class="QVBoxLayout" name="verticalLayout_5">
-       <item>
+      <layout class="QGridLayout" name="gridLayout_8">
+       <item row="0" column="0" colspan="2">
         <widget class="QCheckBox" name="selectTabsWhenCreated">
          <property name="text">
           <string>Select tabs and windows as they are created</string>
          </property>
         </widget>
        </item>
-       <item>
+       <item row="1" column="0" colspan="2">
         <widget class="QCheckBox" name="confirmClosingMultipleTabs">
          <property name="text">
           <string>Confirm when closing multiple tabs or windows</string>
@@ -535,17 +535,49 @@
          </property>
         </widget>
        </item>
-       <item>
+       <item row="2" column="0" colspan="2">
         <widget class="QCheckBox" name="oneCloseButton">
          <property name="text">
           <string>Show only one close button instead of one for each tab</string>
          </property>
          <property name="checked">
-          <bool>false</bool>
+          <bool>true</bool>
          </property>
         </widget>
        </item>
-       <item>
+       <item row="3" column="0">
+        <spacer name="horizontalSpacer_5">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeType">
+          <enum>QSizePolicy::Fixed</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="3" column="1">
+        <widget class="QCheckBox" name="newTabButtonInRightCorner">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="text">
+          <string>Show new tab button in right corner</string>
+         </property>
+         <property name="checked">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="0" colspan="2">
         <widget class="QCheckBox" name="quitAsLastTabClosed">
          <property name="text">
           <string>Quit the application when last tab is closed</string>
@@ -555,7 +587,7 @@
          </property>
         </widget>
        </item>
-       <item>
+       <item row="5" column="0" colspan="2">
         <widget class="QGroupBox" name="openLinksGroupBox">
          <property name="title">
           <string>Opening links</string>
@@ -632,7 +664,7 @@
          </layout>
         </widget>
        </item>
-       <item>
+       <item row="6" column="0" colspan="2">
         <spacer name="verticalSpacer_4">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
@@ -964,6 +996,22 @@
     <hint type="destinationlabel">
      <x>149</x>
      <y>122</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>oneCloseButton</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>newTabButtonInRightCorner</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>344</x>
+     <y>105</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>357</x>
+     <y>132</y>
     </hint>
    </hints>
   </connection>

@@ -98,6 +98,7 @@ SettingsDialog::SettingsDialog(QWidget *parent)
 
 #if QT_VERSION < 0x040500
     oneCloseButton->setVisible(false); // no other mode than one close button with qt <4.5
+    newTabButtonInRightCorner->setVisible(false);
     networkCache->setVisible(false);
 #else
     // As network cache has too many bugs in 4.5.1, do not allow to enable it.
@@ -250,6 +251,7 @@ void SettingsDialog::loadFromSettings()
     confirmClosingMultipleTabs->setChecked(settings.value(QLatin1String("confirmClosingMultipleTabs"), true).toBool());
 #if QT_VERSION >= 0x040500
     oneCloseButton->setChecked(settings.value(QLatin1String("oneCloseButton"),false).toBool());
+    newTabButtonInRightCorner->setChecked(settings.value(QLatin1String("newTabButtonInRightCorner"),true).toBool());
 #endif
     quitAsLastTabClosed->setChecked(settings.value(QLatin1String("quitAsLastTabClosed"), true).toBool());
     openTargetBlankLinksIn->setCurrentIndex(settings.value(QLatin1String("openTargetBlankLinksIn"), TabWidget::NewSelectedTab).toInt());
@@ -369,6 +371,7 @@ void SettingsDialog::saveToSettings()
     settings.setValue(QLatin1String("confirmClosingMultipleTabs"), confirmClosingMultipleTabs->isChecked());
 #if QT_VERSION >= 0x040500
     settings.setValue(QLatin1String("oneCloseButton"), oneCloseButton->isChecked());
+    settings.setValue(QLatin1String("newTabButtonInRightCorner"), newTabButtonInRightCorner->isChecked());
 #endif
     settings.setValue(QLatin1String("quitAsLastTabClosed"), quitAsLastTabClosed->isChecked());
     settings.setValue(QLatin1String("openTargetBlankLinksIn"), openTargetBlankLinksIn->currentIndex());
