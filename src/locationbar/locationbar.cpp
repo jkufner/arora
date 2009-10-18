@@ -59,6 +59,12 @@ LocationBar::LocationBar(QWidget *parent)
             m_clearButton, SLOT(textChanged(const QString&)));
     addWidget(m_clearButton, RightSide);
 
+    // number highlight
+    numberBeginIndex = -1;
+    numberEndIndex = -1;
+    connect(this, SIGNAL(textChanged(const QString &)),
+            this, SLOT(numberLocate(void)));
+
     updateTextMargins();
     setUpdatesEnabled(true);
 }
@@ -85,6 +91,7 @@ void LocationBar::webViewUrlChanged(const QUrl &url)
         return;
     setText(QString::fromUtf8(url.toEncoded()));
     setCursorPosition(0);
+    numberLocate();
 }
 
 void LocationBar::paintEvent(QPaintEvent *event)
@@ -92,6 +99,7 @@ void LocationBar::paintEvent(QPaintEvent *event)
     QPalette p = palette();
     QColor defaultBaseColor = QApplication::palette().color(QPalette::Base);
     QColor backgroundColor = defaultBaseColor;
+
     if (m_webView && m_webView->url().scheme() == QLatin1String("https")
         && p.color(QPalette::Text).value() < 128) {
         QColor lightYellow(248, 248, 210);
@@ -102,9 +110,37 @@ void LocationBar::paintEvent(QPaintEvent *event)
     if (m_webView) {
         int progress = m_webView->progress();
         if (progress == 0) {
-            p.setBrush(QPalette::Base, backgroundColor);
+            if (numberBeginIndex >= 0 && numberEndIndex > numberBeginIndex) {
+                // highlight active number
+                QColor numberColor;
+                if (p.color(QPalette::Text).value() >= 128)
+                    numberColor = QColor(128, 220, 0);
+                else
+                    numberColor = QColor(240, 255, 128);
+
+                int textOffset;
+                getTextMargins(& textOffset, NULL, NULL, NULL);
+                textOffset += 4;    // FIXME: why left margin is not enough?
+
+                double numBegin  = ((double) (fontMetrics().width(text(), numberBeginIndex) + textOffset)) / width();
+                double numEnd    = ((double) (fontMetrics().width(text(), numberEndIndex)   + textOffset)) / width();
+                double numSmooth = 0.1 / width();            // must be > 0
+
+                QLinearGradient gradient(0, 0, width(), 0);
+                gradient.setColorAt(0, backgroundColor);
+                gradient.setColorAt(numBegin  - numSmooth, backgroundColor);
+                gradient.setColorAt(numBegin,              numberColor);
+                gradient.setColorAt(numEnd,                numberColor);
+                gradient.setColorAt(numEnd    + numSmooth, backgroundColor);
+                p.setBrush(QPalette::Base, gradient);
+            } else {
+                // no painting at all
+                p.setBrush(QPalette::Base, backgroundColor);
+            }
         } else {
+            // page loading progress bar
             QColor loadingColor = QColor(116, 192, 250);
+
             if (p.color(QPalette::Text).value() >= 128)
                 loadingColor = defaultBaseColor.darker(200);
 
@@ -193,3 +229,125 @@ void LocationBar::dropEvent(QDropEvent *event)
 
     event->acceptProposedAction();
 }
+
+void LocationBar::numberLocate(void)
+{
+    numberBeginIndex = -1;
+    numberEndIndex = -1;
+
+    int prevBeginIndex = -1;
+    int prevEndIndex = -1;
+
+    int numberNice = 0;
+    int prevNice = 0;
+
+    QChar ch, prev_ch = QLatin1Char('/');
+    bool have_num = false;
+    int i = text().indexOf(QLatin1String("/"), text().indexOf(QLatin1String("://")) + 3);
+    int len = text().length();
+
+    if (i <= 0) {
+        return;
+    }
+
+    while (i <= len) {
+        ch = i < len ? text().at(i) : QLatin1Char('\0');    // last number must be terminated and checked
+
+        if (ch.isDigit()) {
+            numberEndIndex = i + 1;
+
+            if (!have_num) {
+                // new number found
+                have_num = true;
+                numberBeginIndex = i;
+
+                numberNice = 20;            // very ugly numbers will be lost
+
+                // prev_char bonuses
+                if (prev_ch == QLatin1Char('-') || prev_ch == QLatin1Char('_') || prev_ch.isLetter())
+                    numberNice += 4;
+                if (prev_ch == QLatin1Char('/'))
+                    numberNice += 3;
+                if (prev_ch == QLatin1Char('='))
+                    numberNice -= 3;
+            }
+        } else {
+            // if number ends by this char
+            if (have_num) {
+                have_num = false;
+
+                // ending by dot or slash is very nice
+                if (ch == QLatin1Char('.') || ch == QLatin1Char('/')) {
+                    numberNice += 5;
+                }
+
+                // too long or too short numbers are ugly
+                int numberLen = numberEndIndex - numberBeginIndex;
+                if (numberLen > 4) {
+                    numberNice -= (numberLen - 4) * 2;
+                } else if (numberLen < 2) {
+                    numberNice -= 3;
+                }
+
+                // if previous number is more nice than current, keep it
+                if (prevNice > numberNice) {
+                    numberBeginIndex = prevBeginIndex;
+                    numberEndIndex   = prevEndIndex;
+                } else {
+                    prevBeginIndex = numberBeginIndex;
+                    prevEndIndex   = numberEndIndex;
+                    prevNice = numberNice;
+                }
+            }
+
+            // do not read anchor
+            if (ch == QLatin1Char('#')) {
+                break;
+            }
+        }
+
+        // remembeer revious char
+        prev_ch = ch;
+        i++;
+    }
+}
+
+void LocationBar::numberIncrement()
+{
+    bool ok = true;
+    if (numberBeginIndex >= 0 && numberEndIndex > numberBeginIndex) {
+        int n = text().mid(numberBeginIndex, numberEndIndex - numberBeginIndex).toInt(&ok, 10);
+        if (ok) {
+            numberSet(n + 1);
+        }
+    }
+}
+
+void LocationBar::numberDecrement()
+{
+    bool ok;
+
+    if (numberBeginIndex >= 0 && numberEndIndex > numberBeginIndex) {
+        int n = text().mid(numberBeginIndex, numberEndIndex - numberBeginIndex).toInt(&ok, 10);
+        if (ok && n > 0) {
+            numberSet(n - 1);
+        }
+    }
+}
+
+void LocationBar::numberSet(int number)
+{
+    if (numberBeginIndex >= 0 && numberEndIndex > numberBeginIndex) {
+        QString str;
+        str.setNum(number);
+        if (text().at(numberBeginIndex) == QLatin1Char('0')) {
+            str = str.rightJustified(numberEndIndex - numberBeginIndex, QLatin1Char('0'));
+        }
+        str.prepend(text().left(numberBeginIndex));
+        str.append(text().mid(numberEndIndex));
+        setText(str);
+        returnPressed();
+    }
+}
+
+

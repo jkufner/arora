@@ -153,6 +153,9 @@ private slots:
     void downloadManager();
     void selectLineEdit();
 
+    void locationNumberIncrement();
+    void locationNumberDecrement();
+
     void aboutToShowBackMenu();
     void aboutToShowForwardMenu();
     void aboutToShowViewMenu();
@@ -233,6 +236,8 @@ private:
     QAction *m_toolsEnableInspectorAction;
     QAction *m_toolsPreferencesAction;
     QAction *m_toolsSearchManagerAction;
+    QAction *m_toolsLocationNumberIncrementAction;
+    QAction *m_toolsLocationNumberDecrementAction;
     QAction *m_adBlockDialogAction;
 
     QMenu *m_helpMenu;

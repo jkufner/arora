@@ -315,7 +315,7 @@ QWidget *TabWidget::locationBarStack() const
     return m_locationBars;
 }
 
-QLineEdit *TabWidget::currentLocationBar() const
+LocationBar *TabWidget::currentLocationBar() const
 {
     return locationBar(m_locationBars->currentIndex());
 }
@@ -325,7 +325,7 @@ WebView *TabWidget::currentWebView() const
     return webView(currentIndex());
 }
 
-QLineEdit *TabWidget::locationBar(int index) const
+LocationBar *TabWidget::locationBar(int index) const
 {
     return qobject_cast<LocationBar*>(m_locationBars->widget(index));
 }

@@ -37,6 +37,10 @@ public:
     void setWebView(WebView *webView);
     WebView *webView() const;
 
+    void numberIncrement();
+    void numberDecrement();
+    void numberSet(int number);
+
 protected:
     void paintEvent(QPaintEvent *event);
     void focusOutEvent(QFocusEvent *event);
@@ -47,12 +51,15 @@ protected:
 
 private slots:
     void webViewUrlChanged(const QUrl &url);
+    void numberLocate();
 
 private:
     QPointer<WebView> m_webView;
 
     LocationBarSiteIcon *m_siteIcon;
     PrivacyIndicator *m_privacyIndicator;
+
+    int numberBeginIndex, numberEndIndex;
 };
 
 #endif // LOCATIONBAR_H

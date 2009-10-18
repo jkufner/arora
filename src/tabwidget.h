@@ -67,6 +67,7 @@
 
 #include <qwebpage.h>
 #include <qurl.h>
+#include "locationbar.h"
 
 QT_BEGIN_NAMESPACE
 class QCompleter;
@@ -134,11 +135,11 @@ public:
     QAction *previousTabAction() const;
 
     QWidget *locationBarStack() const;
-    QLineEdit *currentLocationBar() const;
+    LocationBar *currentLocationBar() const;
     WebView *currentWebView() const;
     WebView *webView(int index) const;
     WebViewSearch *webViewSearch(int index) const;
-    QLineEdit *locationBar(int index) const;
+    LocationBar *locationBar(int index) const;
     int webViewIndex(WebView *webView) const;
     WebView *makeNewTab(bool makeCurrent = false);
 

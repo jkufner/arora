@@ -841,6 +841,16 @@ void BrowserMainWindow::setupMenu()
     m_toolsMenu->addAction(m_adBlockDialogAction);
 
     m_toolsMenu->addSeparator();
+    m_toolsLocationNumberDecrementAction = new QAction(m_toolsMenu);
+    connect(m_toolsLocationNumberDecrementAction, SIGNAL(triggered()),
+            this, SLOT(locationNumberDecrement()));
+    m_toolsMenu->addAction(m_toolsLocationNumberDecrementAction);
+    m_toolsLocationNumberIncrementAction = new QAction(m_toolsMenu);
+    connect(m_toolsLocationNumberIncrementAction, SIGNAL(triggered()),
+            this, SLOT(locationNumberIncrement()));
+    m_toolsMenu->addAction(m_toolsLocationNumberIncrementAction);
+
+    m_toolsMenu->addSeparator();
     m_toolsPreferencesAction = new QAction(m_toolsMenu);
     m_toolsPreferencesAction->setMenuRole(QAction::PreferencesRole);
     connect(m_toolsPreferencesAction, SIGNAL(triggered()),
@@ -996,6 +1006,10 @@ void BrowserMainWindow::retranslate()
     m_toolsPreferencesAction->setText(tr("Options..."));
     m_toolsPreferencesAction->setShortcut(tr("Ctrl+,"));
     m_toolsSearchManagerAction->setText(tr("Configure Search Engines..."));
+    m_toolsLocationNumberDecrementAction->setText(tr("Incr&ement number in URL"));
+    m_toolsLocationNumberDecrementAction->setShortcut(QKeySequence(tr("F2", "Decrement number in URL")));
+    m_toolsLocationNumberIncrementAction->setText(tr("&Decrement number in URL"));
+    m_toolsLocationNumberIncrementAction->setShortcut(QKeySequence(tr("F4", "Increment number in URL")));
     m_adBlockDialogAction->setText(tr("&Ad Block..."));
 
     m_helpMenu->setTitle(tr("&Help"));
@@ -1583,5 +1597,15 @@ void BrowserMainWindow::openActionUrl(QAction *action)
 void BrowserMainWindow::geometryChangeRequested(const QRect &geometry)
 {
     setGeometry(geometry);
+}
+
+void BrowserMainWindow::locationNumberDecrement()
+{
+    tabWidget()->currentLocationBar()->numberDecrement();
+}
+
+void BrowserMainWindow::locationNumberIncrement()
+{
+    tabWidget()->currentLocationBar()->numberIncrement();
 }
 
