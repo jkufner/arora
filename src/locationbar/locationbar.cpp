@@ -21,6 +21,7 @@
 
 #include "browserapplication.h"
 #include "clearbutton.h"
+#include "incdecbutton.h"
 #include "locationbarsiteicon.h"
 #include "privacyindicator.h"
 #include "searchlineedit.h"
@@ -58,6 +59,16 @@ LocationBar::LocationBar(QWidget *parent)
     connect(this, SIGNAL(textChanged(const QString&)),
             m_clearButton, SLOT(textChanged(const QString&)));
     addWidget(m_clearButton, RightSide);
+
+    // inc/decrement button on the right
+    IncDecButton *m_incDecButton = new IncDecButton(this);
+    connect(m_incDecButton, SIGNAL(decrement()),
+            this, SLOT(numberDecrement()));
+    connect(m_incDecButton, SIGNAL(increment()),
+            this, SLOT(numberIncrement()));
+    connect(this, SIGNAL(numberFound(bool)),
+            m_incDecButton, SLOT(setVisible(bool)));
+    addWidget(m_incDecButton, RightSide);
 
     // number highlight
     numberBeginIndex = -1;
@@ -323,6 +334,8 @@ void LocationBar::numberLocate(void)
         prev_ch = ch;
         i++;
     }
+
+    emit numberFound(numberEndIndex > numberBeginIndex);
 }
 
 void LocationBar::numberIncrement()

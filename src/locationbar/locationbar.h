@@ -37,9 +37,13 @@ public:
     void setWebView(WebView *webView);
     WebView *webView() const;
 
+public slots:
     void numberIncrement();
     void numberDecrement();
     void numberSet(int number);
+
+signals:
+    void numberFound(bool found);
 
 protected:
     void paintEvent(QPaintEvent *event);
