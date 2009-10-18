@@ -276,10 +276,23 @@ void LocationBar::numberLocate(void)
             if (have_num) {
                 have_num = false;
 
-                // ending by dot or slash is very nice
-                if (ch == QLatin1Char('.') || ch == QLatin1Char('/')) {
+                // ending by slash is very nice ...
+                if (ch == QLatin1Char('/')) {
                     numberNice += 5;
                 }
+
+                // ... but file extension is much better
+                if (ch == QLatin1Char('.')) {
+                    int ext_len = 0;
+                    for (int ext_i = i + 1; ext_i < i + 5 && ext_i < len; ext_i++) {
+                        if (!text().at(ext_i).isLetter()) {
+                            break;
+                        }
+                        ext_len++;
+                    }
+                    numberNice += ext_len >= 3 ? 8 : 4;
+                }
+
 
                 // too long or too short numbers are ugly
                 int numberLen = numberEndIndex - numberBeginIndex;
